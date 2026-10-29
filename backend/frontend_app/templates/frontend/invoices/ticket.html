@@ -1,0 +1,18 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="ticket-page" data-ticket-screen data-order-id="{{ order_id }}" data-collect-url-template="{% url 'frontend:collect_payment' 0 %}" data-orders-url="{% url 'frontend:orders' %}">
+  <div class="ticket-toolbar"><div class="paper-width-picker" aria-label="Format du ticket"><button type="button" data-paper-width="58">58 mm</button><button type="button" data-paper-width="80">80 mm</button></div><a class="button button-secondary" data-continue-payment href="#" hidden>Encaisser le solde</a><button class="button button-primary" type="button" data-print>Imprimer le ticket</button><a class="button button-secondary" href="{% url 'frontend:orders' %}">Retour aux commandes</a></div>
+  <p class="ticket-print-hint">Format par défaut : celui des Paramètres. L’impression utilise l’imprimante configurée sur l’ordinateur.</p>
+  <article class="receipt-paper" data-receipt>
+    <header class="receipt-header"><img data-restaurant-logo alt="Logo du restaurant" hidden><h2 data-restaurant-name>Restaurant</h2><p data-restaurant-address></p><p data-restaurant-phone></p></header>
+    <div class="receipt-title">TICKET DE CAISSE</div>
+    <div class="receipt-meta"><div>Ticket N° <strong data-ticket-number>—</strong></div><div>Date : <span data-ticket-date>—</span></div><div>Caissier : <span data-ticket-cashier>{{ request.user.get_full_name|default:request.user.username }}</span></div><div>Client : <span data-ticket-customer>—</span></div></div>
+    <div class="receipt-lines" data-ticket-items></div>
+    <div class="receipt-totals"><div class="receipt-grand-total"><span>TOTAL</span><strong data-ticket-total>—</strong></div><div><span>Payé</span><strong data-ticket-paid>—</strong></div><div><span>Reste à payer</span><strong data-ticket-balance>—</strong></div><div data-ticket-change-row hidden><span>Monnaie</span><strong data-ticket-change>—</strong></div><div class="receipt-payment-methods" data-ticket-payments></div></div>
+    <div class="receipt-state" data-ticket-status>—</div>
+    <footer class="receipt-footer"><span data-ticket-footer>Merci de votre visite !</span><small class="receipt-credit">Logiciel RestoPro développé par Adama Programmeur<br>Contact : +223 78 74 66 43</small></footer>
+  </article>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/ticket.js' %}?v=2" defer></script>{% endblock %}

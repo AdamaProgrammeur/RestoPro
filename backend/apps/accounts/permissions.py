@@ -37,3 +37,16 @@ class IsRestaurantAdmin(BasePermission):
                 or getattr(user, "role", None) == "ADMIN"
             )
         )
+
+
+class CanCollectPayments(BasePermission):
+    """Les administrateurs et gérants peuvent valider un encaissement."""
+
+    message = "Cette action est réservée à l'administrateur ou au gérant."
+
+    def has_permission(self, request, view):
+        user = request.user
+        return user.is_authenticated and (
+            user.is_superuser
+            or getattr(user, "role", None) in {"ADMIN", "MANAGER"}
+        )

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RestoPro — Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#17324D;--blue:#245B7A;--acc:#F59E0B;--bg:#F5F7FA;--card:#fff;--tx:#1F2937;--tx2:#6B7280;--bd:#E5E7EB;--ok:#16A34A;--err:#DC2626;--warn:#D97706;--hl:#FEF3C7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1B2A;--card:#16273A;--tx:#E5E7EB;--tx2:#9CA3AF;--bd:#2B3F55;--ok:#4ADE80;--err:#F87171;--warn:#FBBF24;--hl:#4A3A12}}
+:root[data-theme="dark"]{--bg:#0F1B2A;--card:#16273A;--tx:#E5E7EB;--tx2:#9CA3AF;--bd:#2B3F55;--ok:#4ADE80;--err:#F87171;--warn:#FBBF24;--hl:#4A3A12}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 Inter,system-ui,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+#sd{background:var(--navy);color:#fff;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{font-weight:700;font-size:21px;padding:4px 10px 18px}.logo b{color:var(--acc)}
+.nav a,.nav span{display:block;padding:10px 12px;border-radius:8px;color:#CBD5E1;text-decoration:none;margin-bottom:2px}
+.nav a:hover{background:#ffffff1a}.nav a.on{background:var(--acc);color:#1b1b1b;font-weight:600}.nav span{opacity:.45;cursor:not-allowed}
+main{min-width:0}
+.demo{background:var(--hl);color:var(--tx);padding:6px 24px;font-size:12px;border-bottom:1px solid var(--bd)}
+.top{display:flex;align-items:center;gap:12px;padding:12px 24px;background:var(--card);border-bottom:1px solid var(--bd)}
+.top h1{font-size:20px;margin:0;flex:1}.menu-btn{display:none}
+.user{text-align:right;font-size:13px}.user small{display:block;color:var(--tx2)}
+.page{padding:24px;max-width:1280px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px}
+.card h2{font-size:16px;margin:0 0 10px}
+.btn{border:1px solid var(--bd);background:var(--card);border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:600;text-decoration:none;display:inline-block;text-align:center}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#1b1b1b}.btn.lg{padding:14px 18px;font-size:16px;width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:16px 0}
+.g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.stat small{color:var(--tx2)}.stat b{display:block;font-size:26px;margin-top:4px}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.err{color:var(--err)}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--bd)}th{color:var(--tx2);font-size:12px;text-transform:uppercase}
+input,select{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;width:100%}
+label{font-weight:600;display:block;margin:12px 0 4px}
+.et{color:var(--err);font-size:13px;margin-top:4px;min-height:18px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.r{display:flex;justify-content:space-between;gap:8px}
+.pos{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.chip{padding:8px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--card);cursor:pointer;font-weight:600}.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.it{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:left;cursor:pointer}
+.it:hover{border-color:var(--acc)}.it.off{opacity:.6}
+.im{font-size:38px;aspect-ratio:4/3;display:grid;place-items:center;background:var(--bg);border-radius:8px;margin-bottom:8px}
+.cart{position:sticky;top:16px}
+.line{display:grid;grid-template-columns:1fr auto;gap:6px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.qty{display:flex;align-items:center;gap:6px}.qty button{width:36px;height:36px;border-radius:8px;border:1px solid var(--bd);background:var(--card);cursor:pointer;font-size:18px}
+.total{display:flex;justify-content:space-between;font-size:22px;font-weight:700;padding:14px 0}
+.empty{text-align:center;color:var(--tx2);padding:28px 8px}
+.pm{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.pm button{padding:14px;border-radius:10px;border:2px solid var(--bd);background:var(--card);cursor:pointer;font-weight:600}
+.pm button[aria-pressed=true]{border-color:var(--acc);background:var(--hl)}
+.box{border-radius:10px;padding:14px;margin-top:14px;border:1px solid var(--bd);font-size:18px;font-weight:700}
+.bar{height:10px;background:var(--acc);border-radius:5px}
+.toast{position:fixed;right:16px;bottom:16px;background:var(--navy);color:#fff;padding:12px 16px;border-radius:8px;z-index:30}
+.login{min-height:100vh;display:grid;place-items:center;padding:16px}.login .card{width:100%;max-width:390px;padding:28px}
+.fab{display:none}
+.ticket{background:#fff;color:#000;font:12px/1.35 "Courier New",monospace;padding:8px;margin:0 auto;border:1px dashed #888}
+.ticket hr{border:0;border-top:1px dashed #000;margin:6px 0}
+@media print{@page{margin:0}body *{visibility:hidden}.ticket,.ticket *{visibility:visible}.ticket{position:absolute;left:0;top:0;border:0;margin:0}}
+@media (max-width:1000px){.pos,.g2{grid-template-columns:1fr}.cart{position:static}.grid4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:820px){.app{grid-template-columns:1fr}#sd{position:fixed;z-index:20;left:-250px;width:240px;transition:left .15s}#sd.open{left:0}.menu-btn{display:inline-block}.page{padding:14px 14px 90px}.top{padding:10px 14px}.user{display:none}.demo{padding:6px 14px}.fab{display:block;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:5}}
+</style></head>
+<body><div id="root"></div><style id="pg"></style>
+<script>
+const $=s=>document.querySelector(s),E=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
+const M=[{id:1,n:'Riz au poulet',c:'Plats',p:2500,e:'🍗'},{id:2,n:'Poulet grillé',c:'Plats',p:3000,e:'🍖'},{id:3,n:'Tô sauce gombo',c:'Plats',p:2000,e:'🍲'},{id:4,n:'Brochettes de bœuf',c:'Plats',p:1500,e:'🍢'},{id:5,n:'Jus de bissap',c:'Boissons',p:500,e:'🥤'},{id:6,n:'Jus de gingembre',c:'Boissons',p:500,e:'🧃'},{id:7,n:'Eau minérale',c:'Boissons',p:300,e:'💧'},{id:8,n:'Poulet braisé',c:'Plats',p:3500,e:'🔥',off:1},{id:9,n:'Salade fraîche',c:'Entrées',p:1000,e:'🥗'},{id:10,n:'Banane plantain',c:'Entrées',p:800,e:'🍌'}];
+const CL=['Awa Traoré','Moussa Keïta','Fanta Diarra'],PM={CASH:'Espèces',ORANGE:'Orange Money',MOOV:'Moov Money',CARD:'Carte bancaire',OTHER:'Autre'};
+const F=n=>n.toLocaleString('fr-FR')+' F',FC=n=>n.toLocaleString('fr-FR')+' FCFA',P=(m,a)=>({m,amt:a,rec:a,ch:0}),mi=id=>M.find(m=>m.id==id);
+let ORD=[
+{num:'RST-20261013-0001',h:'08:42',cust:'',total:5500,paid:5500,status:'Payée',items:[[1,2],[5,1]],pays:[P('CASH',5500)]},
+{num:'RST-20261013-0002',h:'09:15',cust:'Awa Traoré',total:3600,paid:3600,status:'Payée',items:[[2,1],[7,2]],pays:[P('ORANGE',3600)]},
+{num:'RST-20261013-0003',h:'10:03',cust:'',total:6000,paid:3000,status:'Partielle',items:[[3,3]],pays:[P('CASH',3000)]},
+{num:'RST-20261013-0004',h:'10:47',cust:'Moussa Keïta',total:7000,paid:0,status:'Impayée',items:[[4,4],[6,2]],pays:[]},
+{num:'RST-20261013-0005',h:'11:20',cust:'',total:3600,paid:3600,status:'Payée',items:[[9,1],[10,2],[5,2]],pays:[P('MOOV',3600)]}];
+let S={in:0,cart:{},cust:'',q:'',cat:'Tous',method:'CASH',order:null,last:null,fmt:80,per:'today',n:6,fs:'',fq:'',mq:'',mc:'',ma:'',cq:'',pmf:'',edit:0,tmp:'',kq:'',uq:'',ur:'',us:'',ue:-1,up:-1,ks:'',ke:-1,tf:0};
+let CFG={name:'Restaurant du Sahel',tag:'',addr:'Bamako, Mali',ph:'70 00 00 00',ph2:'',thanks:'Merci de votre visite !',foot:'',fmt:80,logo:'',sl:0,sc:1};
+let CAT=[{n:'Entrées',d:'Petites portions',on:1},{n:'Plats',d:'Plats principaux',on:1},{n:'Boissons',d:'Jus et eaux',on:1},{n:'Desserts',d:'',on:1}];
+const SMP={num:'CMD-EXEMPLE',h:'14:35',cust:'',total:5000,paid:5000,status:'Payée',items:[[1,2]],pays:[P('CASH',5000)]};
+const catOn=n=>(CAT.find(c=>c.n==n)||{on:1}).on,catNames=()=>CAT.filter(c=>c.on).map(c=>c.n);
+function tkHTML(o,w,c){c=c||CFG;const fs=w==58?11:12,rest=o.total-o.paid;
+return `<div class="ticket" style="width:${w}mm;font-size:${fs}px"><div style="text-align:center">${c.sl&&c.logo?`<img src="${c.logo}" alt="" style="max-width:40mm;max-height:18mm;display:block;margin:0 auto 4px">`:''}<b>${E(c.name).toUpperCase()}</b>${c.tag?'<br>'+E(c.tag):''}${c.sc?(c.addr?'<br>'+E(c.addr):'')+(c.ph?'<br>Tél : '+E(c.ph)+(c.ph2?' / '+E(c.ph2):''):''):''}</div><hr>Ticket N° ${o.num}<br>Date : 13/10/2026 ${o.h}<br>Caissier : Admin démo<br>Client : ${E(o.cust||'Client anonyme')}<hr>${o.items.map(([i,q])=>`${mi(i).n}<div class="r"><span>${q} × ${F(mi(i).p)}</span><span>${F(mi(i).p*q)}</span></div>`).join('')}<hr><div class="r"><b>TOTAL</b><b>${F(o.total)}</b></div><div class="r"><span>Payé</span><span>${F(o.paid)}</span></div>${rest>0?`<div class="r"><b>Reste à payer</b><b>${F(rest)}</b></div>`:''}${o.pays.map(p=>`<div class="r"><span>${PM[p.m]}</span><span>${F(p.rec)}</span></div>${p.ch?`<div class="r"><span>Monnaie</span><span>${F(p.ch)}</span></div>`:''}`).join('')}<div>Statut : ${o.status.toUpperCase()}</div><hr><div style="text-align:center">${E(c.thanks)}${c.foot?'<br>'+E(c.foot):''}</div></div>`}
+
+const tot=c=>Object.entries(c).reduce((s,[i,q])=>s+mi(i).p*q,0);
+const BD={Payée:'<span class="badge ok">✔ Payée</span>',Partielle:'<span class="badge warn">◐ Partielle</span>',Impayée:'<span class="badge err">○ Impayée</span>'};
+const NAV=[['dashboard','Tableau de bord',1],['pos','Nouvelle commande',1],['orders','Commandes',1],['menus','Menus',1],['categories','Catégories',1],['clients','Clients',1],['payments','Paiements',1],['tickets','Tickets et factures',1],['reports','Rapports',1],['users','Utilisateurs',1],['settings','Paramètres',1]];
+function toast(t){const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2600)}
+function shell(t,b,a){$('#root').innerHTML=`<div class="app"><nav id="sd" aria-label="Navigation principale"><div class="logo">Resto<b>Pro</b></div><div class="nav">${NAV.map(([k,l,on])=>on?`<a href="#/${k}" class="${k==a?'on':''}" ${k==a?'aria-current="page"':''}>${l}</a>`:`<span aria-disabled="true" title="Écran non inclus dans ce prototype">${l}</span>`).join('')}</div></nav><main><div class="demo" role="note">Prototype : données de démonstration, aucun backend.</div><header class="top"><button class="btn menu-btn" id="mb" aria-label="Ouvrir le menu">☰</button><h1>${t}</h1><div class="user"><b>Admin démo</b><small>Administrateur</small></div><button class="btn" id="lo">Déconnexion</button></header><div class="page">${b}</div></main></div>`;
+$('#mb').onclick=()=>$('#sd').classList.toggle('open');$('#lo').onclick=()=>{S.in=0;location.hash='#/login'}}
+
+function vLogin(){$('#root').innerHTML=`<div class="login"><form class="card" id="f" novalidate><div class="logo" style="padding:0">Resto<b>Pro</b></div><h1 style="font-size:22px;margin:8px 0 2px">Bienvenue sur RestoPro</h1><p style="color:var(--tx2);margin:0 0 8px">La gestion de votre restaurant, simplement.</p><label for="u">Identifiant</label><input id="u" autocomplete="username"><label for="pw">Mot de passe</label><div class="row" style="flex-wrap:nowrap"><input id="pw" type="password" autocomplete="current-password"><button type="button" class="btn" id="eye">Afficher</button></div><div class="et" id="er" role="alert"></div><button class="btn p lg" id="go">Se connecter</button><p style="color:var(--tx2);font-size:12px;margin:12px 0 0">Démo : tout identifiant avec un mot de passe de 4 caractères ou plus fonctionne.</p></form></div>`;
+$('#eye').onclick=()=>{const p=$('#pw'),h=p.type=='password';p.type=h?'text':'password';$('#eye').textContent=h?'Masquer':'Afficher'};
+$('#f').onsubmit=e=>{e.preventDefault();const u=$('#u').value.trim(),p=$('#pw').value;
+if(!u||!p){$('#er').textContent='Saisissez votre identifiant et votre mot de passe.';return}
+if(p.length<4){$('#er').textContent='Identifiant ou mot de passe incorrect.';return}
+$('#er').textContent='';$('#go').disabled=true;$('#go').textContent='Connexion…';setTimeout(()=>{S.in=1;location.hash='#/dashboard'},600)}}
+
+const DT={today:{ca:48500,cmd:23,enc:41000,att:3,l:['8h','10h','12h','14h','16h','18h','20h'],v:[4,9,26,14,6,10,18]},week:{ca:358000,cmd:171,enc:327000,att:9,l:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],v:[38,45,41,52,60,74,48]},month:{ca:915000,cmd:446,enc:880000,att:14,l:['Sem 1','Sem 2','Sem 3','Sem 4'],v:[210,245,198,262]}};
+function vDash(){const d=DT[S.per],mx=Math.max(...d.v),w=520/d.v.length;
+const bars=d.v.map((v,i)=>{const h=v/mx*150;return `<rect x="${i*w+w*.2}" y="${180-h}" width="${w*.6}" height="${h}" rx="4" fill="#F59E0B"/><text x="${i*w+w/2}" y="${172-h}" text-anchor="middle" font-size="12" fill="currentColor">${v}k</text><text x="${i*w+w/2}" y="198" text-anchor="middle" font-size="12" fill="currentColor" opacity=".7">${d.l[i]}</text>`}).join('');
+const top=[['Riz au poulet',64],['Jus de bissap',58],['Brochettes de bœuf',41],['Poulet grillé',37]];
+shell('Tableau de bord',`<div class="row"><label for="per" style="margin:0">Période</label><select id="per" style="width:auto"><option value="today">Aujourd'hui</option><option value="week">Cette semaine</option><option value="month">Ce mois</option></select><a class="btn p" href="#/pos" style="margin-left:auto">Nouvelle commande</a></div>
+<div class="grid4"><div class="card stat"><small>Chiffre d'affaires</small><b>${FC(d.ca)}</b></div><div class="card stat"><small>Commandes</small><b>${d.cmd}</b></div><div class="card stat"><small>Montant encaissé</small><b class="ok">${FC(d.enc)}</b></div><div class="card stat"><small>En attente de paiement</small><b class="warn">${d.att}</b></div></div>
+<div class="g2"><div class="card"><h2>Évolution des ventes (en milliers de FCFA)</h2><svg viewBox="0 0 520 205" role="img" aria-label="Histogramme des ventes" style="width:100%">${bars}</svg></div>
+<div class="card"><h2>Plats les plus vendus</h2>${top.map(([n,q])=>`<div style="margin-bottom:12px"><div class="r"><span>${n}</span><b>${q}</b></div><div class="bar" style="width:${q/64*100}%"></div></div>`).join('')}</div></div>
+<div class="card"><div class="r"><h2>Commandes récentes</h2><a href="#/orders">Tout voir</a></div><div class="wrap"><table><tr><th>N°</th><th>Client</th><th>Montant</th><th>Paiement</th></tr>${ORD.slice(0,4).map(o=>`<tr><td>${o.num}</td><td>${o.cust||'Client anonyme'}</td><td>${FC(o.total)}</td><td>${BD[o.status]}</td></tr>`).join('')}</table></div></div>`,'dashboard');
+$('#per').value=S.per;$('#per').onchange=e=>{S.per=e.target.value;vDash()}}
+
+function rGrid(){const l=M.filter(m=>catOn(m.c)&&(S.cat=='Tous'||m.c==S.cat)&&m.n.toLowerCase().includes(S.q.toLowerCase()));
+$('#grid').innerHTML=l.length?l.map(m=>`<button class="it ${m.off?'off':''}" data-id="${m.id}" aria-label="${m.n}, ${F(m.p)}${m.off?', indisponible':''}"><div class="im" aria-hidden="true">${m.e}</div><b>${m.n}</b><div class="r" style="margin-top:4px;align-items:center"><span>${F(m.p)}</span>${m.off?'<span class="badge err">Indisponible</span>':''}</div></button>`).join(''):`<div class="empty" style="grid-column:1/-1">Aucun plat ne correspond à « ${E(S.q)} ».<br>Modifiez la recherche ou la catégorie.</div>`;
+$('#chips').innerHTML=['Tous',...catNames()].map(c=>`<button class="chip ${c==S.cat?'on':''}" data-c="${c}" aria-pressed="${c==S.cat}">${c}</button>`).join('')}
+function rCart(){const e=Object.entries(S.cart),t=tot(S.cart),n=e.reduce((s,[,q])=>s+q,0);
+$('#cart').innerHTML=`<div class="r"><h2>Panier${n?' ('+n+')':''}</h2>${n?'<button class="btn" data-a="clear">Vider</button>':''}</div>
+${e.length?e.map(([i,q])=>{const m=mi(i);return `<div class="line"><div><b>${m.n}</b><br><small>${F(m.p)} × ${q} = ${F(m.p*q)}</small></div><div class="qty"><button data-a="-" data-id="${i}" aria-label="Diminuer ${m.n}">−</button><span aria-live="polite">${q}</span><button data-a="+" data-id="${i}" aria-label="Augmenter ${m.n}">+</button><button data-a="x" data-id="${i}" aria-label="Retirer ${m.n}">×</button></div></div>`}).join(''):'<div class="empty">Le panier est vide.<br>Touchez un plat pour l\'ajouter.</div>'}
+<label for="cu">Client (facultatif)</label><select id="cu"><option value="">Client anonyme</option>${CL.map(c=>`<option ${c==S.cust?'selected':''}>${c}</option>`).join('')}</select>
+<div class="total"><span>Total</span><span>${FC(t)}</span></div><button class="btn p lg" data-a="pay" ${n?'':'disabled'}>Passer au paiement</button>`;
+$('#fab').textContent=n?`Panier (${n}) · ${FC(t)}`:'Panier vide'}
+function vPos(){shell('Nouvelle commande',`<div class="pos"><section><input id="q" type="search" placeholder="Rechercher un plat…" aria-label="Rechercher un plat" value="${E(S.q)}"><div class="chips" id="chips"></div><div class="items" id="grid"></div></section><div class="card cart" id="cart"></div></div><a class="btn p lg fab" id="fab" href="#cart"></a>`,'pos');
+rGrid();rCart();
+$('#q').oninput=e=>{S.q=e.target.value;rGrid()};
+$('#chips').onclick=e=>{const b=e.target.closest('[data-c]');if(b){S.cat=b.dataset.c;rGrid()}};
+$('#grid').onclick=e=>{const b=e.target.closest('.it');if(!b)return;const m=mi(b.dataset.id);if(m.off){toast(`« ${m.n} » est indisponible.`);return}S.cart[m.id]=(S.cart[m.id]||0)+1;rCart()};
+$('#cart').onchange=e=>{if(e.target.id=='cu')S.cust=e.target.value};
+$('#cart').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,i=b.dataset.id;
+if(a=='+')S.cart[i]++;else if(a=='-'){if(--S.cart[i]<1)delete S.cart[i]}else if(a=='x')delete S.cart[i];else if(a=='clear')S.cart={};
+else if(a=='pay'){const o={num:'RST-20261013-'+String(S.n++).padStart(4,'0'),h:new Date().toTimeString().slice(0,5),cust:S.cust,total:tot(S.cart),paid:0,status:'Impayée',items:Object.entries(S.cart).map(([k,q])=>[+k,q]),pays:[]};ORD.unshift(o);S.order=o;S.cart={};S.cust='';S.method='CASH';location.hash='#/pay';return}
+rCart()}}
+
+function rForm(){const o=S.order,due=o.total-o.paid,m=S.method,cash=m=='CASH',ref=['ORANGE','MOOV','CARD'].includes(m);
+$('#form').innerHTML=`<h2>Mode de paiement</h2><div class="pm" id="pm">${Object.entries(PM).map(([k,l])=>`<button type="button" data-m="${k}" aria-pressed="${k==m}">${l}</button>`).join('')}</div>
+<label for="amt">${cash?'Montant reçu (FCFA)':'Montant à encaisser (FCFA)'}</label><input id="amt" type="number" min="0" inputmode="numeric" placeholder="0">
+${cash?`<div class="row" style="margin-top:8px"><button type="button" class="btn" data-q="${due}">Montant exact</button><button type="button" class="btn" data-q="${Math.ceil(due/5000)*5000}">${F(Math.ceil(due/5000)*5000)}</button></div>`:''}
+${ref?'<label for="ref">Référence de la transaction</label><input id="ref" placeholder="Ex. OM-123456">':''}
+<div class="et" id="er" role="alert"></div><div class="box" id="res" aria-live="polite"></div>
+<button class="btn p lg" id="ok" style="margin-top:14px" disabled>Confirmer le paiement</button>`;upd()}
+function upd(){const o=S.order,due=o.total-o.paid,cash=S.method=='CASH',ref=['ORANGE','MOOV','CARD'].includes(S.method),rec=+$('#amt').value||0;
+const ap=cash?Math.min(rec,due):rec,ch=cash?Math.max(rec-due,0):0,rest=due-ap;let ok=rec>0,er='',h=`Reste à payer : ${FC(due)}`;
+if(!cash&&rec>due){er=`Le montant dépasse le reste à payer (${FC(due)}).`;ok=false}
+else if(rec>0&&ch>0)h=`<span class="ok">✔ Monnaie à rendre : ${FC(ch)}</span>`;
+else if(rec>0&&rest>0)h=`<span class="warn">◐ Paiement partiel · reste à payer : ${FC(rest)}</span>`;
+else if(rec>0)h='<span class="ok">✔ Montant exact : commande soldée</span>';
+if(ref&&!$('#ref').value.trim())ok=false;
+$('#er').textContent=er;$('#res').innerHTML=h;$('#ok').disabled=!ok}
+function vPay(){const o=S.order;if(!o){location.hash='#/pos';return}const due=o.total-o.paid;
+shell('Encaissement',`<div class="pos"><div class="card" id="form"></div><div class="card"><h2>Commande ${o.num}</h2><p style="margin:0 0 8px;color:var(--tx2)">Client : ${o.cust||'Client anonyme'}</p>${o.items.map(([i,q])=>`<div class="r"><span>${q} × ${mi(i).n}</span><span>${F(mi(i).p*q)}</span></div>`).join('')}<hr style="border:0;border-top:1px solid var(--bd)"><div class="total" style="padding:6px 0"><span>Total</span><span>${FC(o.total)}</span></div><div class="r"><span>Déjà payé</span><span>${FC(o.paid)}</span></div><div class="r"><b>Reste à payer</b><b>${FC(due)}</b></div><a class="btn" href="#/pos" style="margin-top:14px;width:100%">Retour à la caisse</a></div></div>`,'pos');
+rForm();
+$('#form').oninput=upd;
+$('#form').onclick=e=>{const b=e.target.closest('[data-m]'),q=e.target.closest('[data-q]');if(b){S.method=b.dataset.m;rForm()}if(q){$('#amt').value=q.dataset.q;upd()}};
+$('#form').addEventListener('click',e=>{if(e.target.id!='ok')return;const ok=e.target;ok.disabled=true;ok.textContent='Enregistrement…';
+setTimeout(()=>{const cash=S.method=='CASH',rec=+$('#amt').value,ap=cash?Math.min(rec,due):rec,ch=cash?Math.max(rec-due,0):0;
+const p={m:S.method,amt:ap,rec,ch,ref:$('#ref')?$('#ref').value:''};o.pays.push(p);o.paid+=ap;o.status=o.paid>=o.total?'Payée':'Partielle';S.last=p;location.hash='#/done'},700)})}
+
+function vDone(){const o=S.order,p=S.last;if(!o||!p){location.hash='#/orders';return}const full=o.status=='Payée',rest=o.total-o.paid;
+shell('Paiement',`<div class="card" style="max-width:560px;margin:0 auto"><div style="text-align:center"><div class="${full?'ok':'warn'}" style="font-size:44px" aria-hidden="true">${full?'✔':'◐'}</div><h2 style="font-size:20px">${full?'Paiement enregistré avec succès':'Paiement partiel enregistré'}</h2></div>
+<div class="r"><span>Commande</span><b>${o.num}</b></div><div class="r"><span>Montant payé</span><b>${FC(p.amt)}</b></div><div class="r"><span>Mode</span><b>${PM[p.m]}</b></div><div class="r"><span>Statut</span>${BD[o.status]}</div><div class="r"><span>Date</span><b>13/10/2026 ${o.h}</b></div>
+${rest>0?`<div class="r"><span>Reste à payer</span><b class="warn">${FC(rest)}</b></div>`:''}${p.ch>0?`<div class="r"><span>Monnaie rendue</span><b>${FC(p.ch)}</b></div>`:''}
+<div class="row" style="margin-top:16px"><a class="btn p" href="#/ticket">Imprimer le ticket</a>${rest>0?'<a class="btn" href="#/pay">Encaisser le reste</a>':''}<a class="btn" href="#/pos">Nouvelle commande</a><a class="btn" href="#/orders">Consulter la commande</a></div></div>`,'pos')}
+
+function vTicket(){const o=S.order;if(!o){location.hash='#/orders';return}
+const draw=()=>{const w=S.tf||CFG.fmt;$('#pg').textContent=`@media print{@page{size:${w}mm auto}}`;$('#tk').innerHTML=tkHTML(o,w);document.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f==w))};
+shell('Ticket de caisse',`<div class="row" style="margin-bottom:16px"><div class="pm" style="width:240px"><button data-f="58" aria-pressed="false">58 mm</button><button data-f="80" aria-pressed="false">80 mm</button></div><button class="btn p" id="pr">Imprimer le ticket</button><a class="btn" href="#/orders">Retour aux commandes</a></div><div id="tk"></div><p style="color:var(--tx2);font-size:12px;text-align:center">Format par défaut : celui des Paramètres. L'impression utilise l'imprimante configurée sur l'ordinateur.</p>`,'tickets');
+draw();document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{S.tf=+b.dataset.f;draw()});$('#pr').onclick=()=>window.print()}
+
+function rTab(){const l=ORD.filter(o=>(!S.fs||o.status==S.fs)&&o.num.toLowerCase().includes(S.fq.toLowerCase()));
+$('#tb').innerHTML=l.length?l.map(o=>`<tr><td>${o.num}</td><td>${o.h}</td><td>${o.cust||'Client anonyme'}</td><td>${FC(o.total)}</td><td>${BD[o.status]}</td><td class="row">${o.status!='Payée'?`<button class="btn" data-pay="${o.num}">Encaisser</button>`:''}<button class="btn" data-tk="${o.num}" ${o.pays.length?'':'disabled'}>Ticket</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">Aucune commande trouvée.</td></tr>'}
+function vOrders(){shell('Commandes',`<div class="row" style="margin-bottom:12px"><input id="fq" type="search" placeholder="Rechercher par numéro" aria-label="Rechercher par numéro" style="max-width:260px" value="${E(S.fq)}"><select id="fs" aria-label="Filtrer par statut de paiement" style="max-width:200px"><option value="">Tous les statuts</option><option>Payée</option><option>Partielle</option><option>Impayée</option></select></div><div class="card wrap"><table><thead><tr><th>Numéro</th><th>Heure</th><th>Client</th><th>Montant</th><th>Paiement</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>`,'orders');
+$('#fs').value=S.fs;rTab();$('#fq').oninput=e=>{S.fq=e.target.value;rTab()};$('#fs').onchange=e=>{S.fs=e.target.value;rTab()};
+$('#tb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const n=b.dataset.pay||b.dataset.tk;S.order=ORD.find(o=>o.num==n);
+if(b.dataset.tk){S.last=S.order.pays[S.order.pays.length-1];location.hash='#/ticket'}else{S.method='CASH';location.hash='#/pay'}}}
+
+const IMG=m=>m.img?`<img src="${m.img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:m.e;
+function rMenus(){const l=M.filter(m=>(!S.mc||m.c==S.mc)&&(!S.ma||(S.ma=='on'?!m.off:!!m.off))&&m.n.toLowerCase().includes(S.mq.toLowerCase()));
+$('#mg').innerHTML=l.length?l.map(m=>`<div class="card"><div class="im" aria-hidden="true">${IMG(m)}</div><b>${E(m.n)}</b><div class="r"><small>${m.c}</small><b>${F(m.p)}</b></div><div style="margin:8px 0">${m.off?'<span class="badge err">✕ Indisponible</span>':'<span class="badge ok">✔ Disponible</span>'}</div><div class="row"><button class="btn" data-e="${m.id}">Modifier</button><button class="btn" data-t="${m.id}">${m.off?'Activer':'Désactiver'}</button></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">Aucun plat ne correspond.<br>Modifiez les filtres ou ajoutez un plat.</div>'}
+function vMenus(){shell('Menus',`<div class="row" style="margin-bottom:12px"><input id="mq" type="search" placeholder="Rechercher un plat" aria-label="Rechercher un plat" style="max-width:240px" value="${E(S.mq)}"><select id="mc" aria-label="Catégorie" style="max-width:180px"><option value="">Toutes catégories</option>${CAT.map(c=>`<option>${E(c.n)}</option>`).join('')}</select><select id="ma" aria-label="Disponibilité" style="max-width:180px"><option value="">Tous</option><option value="on">Disponibles</option><option value="off">Indisponibles</option></select><a class="btn p" href="#/menuform" id="add" style="margin-left:auto">Ajouter un plat</a></div><div class="items" id="mg" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))"></div>`,'menus');
+$('#mc').value=S.mc;$('#ma').value=S.ma;rMenus();
+$('#add').onclick=()=>{S.edit=0;S.tmp=''};$('#mq').oninput=e=>{S.mq=e.target.value;rMenus()};$('#mc').onchange=e=>{S.mc=e.target.value;rMenus()};$('#ma').onchange=e=>{S.ma=e.target.value;rMenus()};
+$('#mg').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.e){S.edit=+b.dataset.e;S.tmp='';location.hash='#/menuform'}else{const m=mi(b.dataset.t);m.off=m.off?0:1;toast(m.off?`« ${m.n} » désactivé.`:`« ${m.n} » activé.`);rMenus()}}}
+function vMenuForm(){const m=S.edit?mi(S.edit):{n:'',c:'Plats',p:'',off:0,e:'Aperçu'};
+shell(S.edit?'Modifier un plat':'Ajouter un plat',`<form class="card" id="mf" novalidate style="max-width:640px"><p style="color:var(--tx2);margin:0">Les champs marqués * sont obligatoires.</p><label for="n">Nom du plat *</label><input id="n" value="${E(m.n)}"><div class="et" id="en" role="alert"></div><label for="c">Catégorie *</label><select id="c">${[...new Set([...catNames(),m.c])].map(c=>`<option ${c==m.c?'selected':''}>${c}</option>`).join('')}</select><label for="d">Description</label><input id="d" value="${E(m.d||'')}"><label for="p">Prix de vente (FCFA) *</label><input id="p" type="number" min="0" inputmode="numeric" value="${m.p}"><div class="et" id="ep" role="alert"></div><label for="im">Image ${S.edit?'(laisser vide pour conserver l\'actuelle)':''}</label><input id="im" type="file" accept="image/*"><div class="im" id="pv" style="max-width:200px;margin-top:8px">${IMG(m)}</div><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="av" style="width:auto" ${m.off?'':'checked'}> Disponible à la vente</label><div class="row" style="margin-top:16px"><button class="btn p">Enregistrer</button><a class="btn" href="#/menus">Annuler</a></div></form>`,'menus');
+$('#im').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S.tmp=r.result;$('#pv').innerHTML=`<img src="${r.result}" alt="Aperçu" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`};r.readAsDataURL(f)};
+$('#mf').onsubmit=e=>{e.preventDefault();const n=$('#n').value.trim(),p=$('#p').value,bad=p===''||+p<0;
+$('#en').textContent=n?'':'Le nom du plat est obligatoire.';$('#ep').textContent=bad?'Saisissez un prix valide (0 ou plus).':'';if(!n||bad)return;
+const o=S.edit?mi(S.edit):{id:Math.max(...M.map(x=>x.id))+1,e:'🍽️'};Object.assign(o,{n,c:$('#c').value,d:$('#d').value,p:+p,off:$('#av').checked?0:1});if(S.tmp)o.img=S.tmp;if(!S.edit)M.push(o);S.edit=0;S.tmp='';toast('Plat enregistré.');location.hash='#/menus'}}
+function vClients(){const rows=()=>CL.filter(c=>c.toLowerCase().includes(S.cq.toLowerCase())).map(c=>{const o=ORD.filter(x=>x.cust==c);return `<tr><td>${E(c)}</td><td>${o.length}</td><td>${FC(o.reduce((s,x)=>s+x.total,0))}</td></tr>`}).join('')||'<tr><td colspan="3" class="empty">Aucun client trouvé.</td></tr>';
+shell('Clients',`<p style="color:var(--tx2);margin-top:0">Les clients sont facultatifs : une vente peut toujours rester anonyme.</p><div class="row" style="margin-bottom:12px"><input id="cq" type="search" placeholder="Rechercher un client" aria-label="Rechercher un client" style="max-width:240px" value="${E(S.cq)}"></div><div class="g2"><div class="card wrap"><table><thead><tr><th>Nom</th><th>Commandes</th><th>Total des achats</th></tr></thead><tbody id="ct">${rows()}</tbody></table></div><form class="card" id="cf" novalidate><h2>Ajouter un client</h2><label for="nc">Nom complet *</label><input id="nc"><div class="et" id="ec" role="alert"></div><button class="btn p" style="margin-top:8px">Ajouter</button></form></div>`,'clients');
+$('#cq').oninput=e=>{S.cq=e.target.value;$('#ct').innerHTML=rows()};
+$('#cf').onsubmit=e=>{e.preventDefault();const n=$('#nc').value.trim();if(!n){$('#ec').textContent='Le nom est obligatoire.';return}CL.push(n);toast('Client ajouté.');vClients()}}
+function vPayments(){const all=ORD.flatMap(o=>o.pays.map((p,i)=>({r:o.num.slice(-4)+'-'+(i+1),n:o.num,a:p.amt,m:p.m,s:'ok'}))).concat([{r:'0003-X',n:'RST-20261013-0003',a:1000,m:'CARD',s:'x'}]);
+const l=all.filter(p=>!S.pmf||p.m==S.pmf),t=l.filter(p=>p.s=='ok').reduce((s,p)=>s+p.a,0);
+shell('Paiements',`<div class="row" style="margin-bottom:12px"><select id="pf" aria-label="Mode de paiement" style="max-width:200px"><option value="">Tous les modes</option>${Object.entries(PM).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><b style="margin-left:auto">Total encaissé : ${FC(t)}</b></div><div class="card wrap"><table><thead><tr><th>Réf.</th><th>Commande</th><th>Montant</th><th>Mode</th><th>Statut</th><th>Enregistré par</th></tr></thead><tbody>${l.length?l.map(p=>`<tr><td>${p.r}</td><td>${p.n}</td><td>${FC(p.a)}</td><td>${PM[p.m]}</td><td>${p.s=='ok'?'<span class="badge ok">✔ Encaissé</span>':'<span class="badge err">✕ Annulé</span>'}</td><td>Admin démo</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Aucun paiement trouvé.</td></tr>'}</tbody></table></div><p style="color:var(--tx2);font-size:12px">Les paiements annulés ne sont pas comptés dans le total encaissé.</p>`,'payments');
+$('#pf').value=S.pmf;$('#pf').onchange=e=>{S.pmf=e.target.value;vPayments()}}
+function vReports(){const d=DT[S.per],mx=Math.max(...d.v),w=520/d.v.length,pm={};ORD.forEach(o=>o.pays.forEach(p=>pm[p.m]=(pm[p.m]||0)+p.amt));const t=Object.values(pm).reduce((a,b)=>a+b,0)||1;
+const bars=d.v.map((v,i)=>{const h=v/mx*150;return `<rect x="${i*w+w*.2}" y="${180-h}" width="${w*.6}" height="${h}" rx="4" fill="#F59E0B"/><text x="${i*w+w/2}" y="${172-h}" text-anchor="middle" font-size="12" fill="currentColor">${v}k</text><text x="${i*w+w/2}" y="198" text-anchor="middle" font-size="12" fill="currentColor" opacity=".7">${d.l[i]}</text>`}).join('');
+shell('Rapports de vente',`<div class="row"><label for="per" style="margin:0">Période</label><select id="per" style="width:auto"><option value="today">Aujourd'hui</option><option value="week">Cette semaine</option><option value="month">Ce mois</option></select></div><div class="grid4"><div class="card stat"><small>Chiffre d'affaires</small><b>${FC(d.ca)}</b></div><div class="card stat"><small>Montant encaissé</small><b class="ok">${FC(d.enc)}</b></div><div class="card stat"><small>Commandes</small><b>${d.cmd}</b></div><div class="card stat"><small>Panier moyen</small><b>${FC(Math.round(d.ca/d.cmd))}</b></div></div><div class="g2"><div class="card"><h2>Évolution des ventes (milliers de FCFA)</h2><svg viewBox="0 0 520 205" role="img" aria-label="Histogramme des ventes" style="width:100%">${bars}</svg></div><div class="card"><h2>Par mode de paiement</h2>${Object.entries(pm).map(([k,v])=>`<div style="margin-bottom:12px"><div class="r"><span>${PM[k]}</span><b>${FC(v)} · ${Math.round(v/t*100)} %</b></div><div class="bar" style="width:${v/t*100}%"></div></div>`).join('')}<small style="color:var(--tx2)">Calculé sur les commandes de démonstration.</small></div></div>`,'reports');
+$('#per').value=S.per;$('#per').onchange=e=>{S.per=e.target.value;vReports()}}
+
+function vTickets(){const rows=()=>ORD.filter(o=>o.num.toLowerCase().includes(S.fq.toLowerCase())).map(o=>`<tr><td>${o.num}</td><td>${o.h}</td><td>${o.cust||'Client anonyme'}</td><td>${FC(o.total)}</td><td>${BD[o.status]}</td><td><button class="btn p" data-tk="${o.num}" ${o.pays.length?'':'disabled title="Aucun paiement enregistré"'}>Imprimer le ticket</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Aucun ticket trouvé.</td></tr>';
+shell('Tickets et factures',`<div class="row" style="margin-bottom:12px"><input id="fq" type="search" placeholder="Rechercher par numéro" aria-label="Rechercher par numéro" style="max-width:260px" value="${E(S.fq)}"><span style="color:var(--tx2);font-size:12px">Réimprimer ne modifie ni la commande ni les montants.</span></div><div class="card wrap"><table><thead><tr><th>Ticket</th><th>Heure</th><th>Client</th><th>Montant</th><th>Paiement</th><th>Action</th></tr></thead><tbody id="tb">${rows()}</tbody></table></div>`,'tickets');
+$('#fq').oninput=e=>{S.fq=e.target.value;$('#tb').innerHTML=rows()};
+$('#tb').onclick=e=>{const b=e.target.closest('[data-tk]');if(!b)return;S.order=ORD.find(o=>o.num==b.dataset.tk);S.tf=0;location.hash='#/ticket'}}
+function rCats(){const l=CAT.map((c,i)=>({c,i})).filter(({c})=>c.n.toLowerCase().includes(S.kq.toLowerCase())&&(!S.ks||(S.ks=='on')==!!c.on));
+$('#kt').innerHTML=l.length?l.map(({c,i})=>{const n=M.filter(m=>m.c==c.n).length;return `<tr><td><b>${E(c.n)}</b>${c.d?`<br><small style="color:var(--tx2)">${E(c.d)}</small>`:''}</td><td>${n}</td><td>${c.on?'<span class="badge ok">✔ Active</span>':'<span class="badge err">○ Inactive</span>'}</td><td><div class="row"><button class="btn" data-e="${i}">Modifier</button><button class="btn" data-t="${i}">${c.on?'Désactiver':'Activer'}</button><button class="btn" data-d="${i}">Supprimer</button></div></td></tr>`}).join(''):'<tr><td colspan="4" class="empty">Aucune catégorie ne correspond. Ajoutez une catégorie pour organiser vos menus.</td></tr>'}
+function vCats(){shell('Catégories',`<div class="row" style="margin-bottom:12px"><input id="kq" type="search" placeholder="Rechercher une catégorie" aria-label="Rechercher une catégorie" style="max-width:240px" value="${E(S.kq)}"><select id="ks" aria-label="Statut" style="max-width:150px"><option value="">Tous</option><option value="on">Actives</option><option value="off">Inactives</option></select><a class="btn p" href="#/catform" id="kadd" style="margin-left:auto">Ajouter une catégorie</a></div><div class="card wrap"><table><thead><tr><th>Nom</th><th>Menus</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="kt"></tbody></table></div>`,'categories');
+$('#ks').value=S.ks;rCats();$('#kadd').onclick=()=>{S.ke=-1};$('#kq').oninput=e=>{S.kq=e.target.value;rCats()};$('#ks').onchange=e=>{S.ks=e.target.value;rCats()};
+$('#kt').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.e!==undefined){S.ke=+b.dataset.e;location.hash='#/catform';return}
+if(b.dataset.t!==undefined){const c=CAT[b.dataset.t];if(c.on&&!confirm('Désactiver cette catégorie ? Ses plats ne seront plus proposés en caisse.'))return;c.on=c.on?0:1;toast(c.on?`« ${c.n} » activée.`:`« ${c.n} » désactivée.`);rCats();return}
+const c=CAT[b.dataset.d],n=M.filter(m=>m.c==c.n).length;if(n){toast(`« ${c.n} » contient ${n} plat(s) : suppression impossible. Désactivez-la plutôt.`);return}
+if(confirm('Supprimer définitivement cette catégorie ?')){CAT.splice(b.dataset.d,1);toast('Catégorie supprimée.');rCats()}}}
+function vCatForm(){const c=S.ke>=0?CAT[S.ke]:{n:'',d:'',on:1};
+shell(S.ke>=0?'Modifier une catégorie':'Ajouter une catégorie',`<form class="card" id="kf" novalidate style="max-width:560px"><p style="color:var(--tx2);margin:0">Les champs marqués * sont obligatoires.</p><label for="kn">Nom *</label><input id="kn" value="${E(c.n)}"><div class="et" id="ek" role="alert"></div><label for="kd">Description</label><input id="kd" value="${E(c.d)}"><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="ka" style="width:auto" ${c.on?'checked':''}> Catégorie active</label><div class="row" style="margin-top:16px"><button class="btn p">Enregistrer</button><a class="btn" href="#/categories">Annuler</a></div></form>`,'categories');
+$('#kf').onsubmit=e=>{e.preventDefault();const n=$('#kn').value.trim().replace(/\s+/g,' ');
+if(!n){$('#ek').textContent='Le nom est obligatoire.';return}
+if(CAT.some((x,i)=>i!=S.ke&&x.n.toLowerCase()==n.toLowerCase())){$('#ek').textContent='Une catégorie portant ce nom existe déjà.';return}
+const v={n,d:$('#kd').value.trim(),on:$('#ka').checked?1:0};
+if(S.ke>=0){const old=CAT[S.ke].n;M.forEach(m=>{if(m.c==old)m.c=n});CAT[S.ke]=v}else CAT.push(v);
+toast('Catégorie enregistrée.');location.hash='#/categories'}}
+function vSettings(){let lg=CFG.logo;const F2=[['sn','name'],['st','tag'],['sa','addr'],['sp','ph'],['sq','ph2'],['sth','thanks'],['sf2','foot']];
+shell('Paramètres du restaurant',`<div class="pos" style="grid-template-columns:1fr 360px"><form class="card" id="sform" novalidate><p style="color:var(--tx2);margin:0">Les champs marqués * sont obligatoires. Logo : JPG, PNG ou WebP, 2 Mo maximum.</p>
+<label for="sn">Nom du restaurant *</label><input id="sn"><div class="et" id="e1" role="alert"></div><label for="st">Message de bienvenue / slogan</label><input id="st">
+<label for="sl">Logo</label><input id="sl" type="file" accept="image/jpeg,image/png,image/webp"><div class="et" id="e2" role="alert"></div>
+<label for="sa">Adresse</label><input id="sa"><div class="row" style="flex-wrap:nowrap"><div style="flex:1"><label for="sp">Téléphone principal</label><input id="sp"></div><div style="flex:1"><label for="sq">Téléphone secondaire</label><input id="sq"></div></div>
+<label for="sth">Message de remerciement</label><input id="sth"><label for="sf2">Pied de ticket</label><input id="sf2">
+<label for="sfm">Format d'impression</label><select id="sfm"><option value="58">58 mm</option><option value="80">80 mm</option></select><p style="color:var(--tx2);font-size:12px;margin:8px 0 0">Devise : FCFA (XOF)</p>
+<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="ssl" style="width:auto"> Afficher le logo sur les tickets</label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="ssc" style="width:auto"> Afficher adresse et téléphone sur les tickets</label>
+<button class="btn p" style="margin-top:16px">Enregistrer les paramètres</button></form><div class="card"><h2>Aperçu du ticket</h2><p style="color:var(--tx2);margin:0 0 8px;font-size:12px">Données d'exemple, mises à jour en direct.</p><div id="pv" style="overflow-x:auto"></div></div></div>`,'settings');
+F2.forEach(([id,k])=>$('#'+id).value=CFG[k]);$('#sfm').value=CFG.fmt;$('#ssl').checked=!!CFG.sl;$('#ssc').checked=!!CFG.sc;
+const rd=()=>{const g=id=>$('#'+id).value.trim();return{name:g('sn'),tag:g('st'),addr:g('sa'),ph:g('sp'),ph2:g('sq'),thanks:g('sth'),foot:g('sf2'),fmt:+$('#sfm').value,sl:$('#ssl').checked?1:0,sc:$('#ssc').checked?1:0,logo:lg}};
+const pvw=()=>{const t=rd();$('#pv').innerHTML=tkHTML(SMP,t.fmt,t)};pvw();
+$('#sform').oninput=pvw;$('#sform').onchange=pvw;
+$('#sl').onchange=e=>{const f=e.target.files[0];$('#e2').textContent='';if(!f)return;
+if(!['image/jpeg','image/png','image/webp'].includes(f.type)){$('#e2').textContent='Format non accepté : utilisez JPG, PNG ou WebP.';e.target.value='';return}
+if(f.size>2*1024*1024){$('#e2').textContent='Le logo ne doit pas dépasser 2 Mo.';e.target.value='';return}
+const r=new FileReader();r.onload=()=>{lg=r.result;pvw()};r.readAsDataURL(f)};
+$('#sform').onsubmit=e=>{e.preventDefault();const t=rd();if(!t.name){$('#e1').textContent='Le nom du restaurant est obligatoire.';return}$('#e1').textContent='';Object.assign(CFG,t);S.tf=0;toast('Paramètres enregistrés.')}}
+
+const RL={ADMIN:'Administrateur',MANAGER:'Manager',CASHIER:'Caissier'};
+let USR=[{nom:'Doucouré',pre:'Admin',u:'admin',em:'',role:'ADMIN',on:1,date:'12/08/2026',last:'13/10/2026 08:30',me:1},{nom:'Traoré',pre:'Awa',u:'awa',em:'',role:'MANAGER',on:1,date:'20/08/2026',last:'12/10/2026 17:05'},{nom:'Keïta',pre:'Moussa',u:'moussa',em:'',role:'CASHIER',on:1,date:'02/09/2026',last:'13/10/2026 07:50'},{nom:'Diarra',pre:'Fanta',u:'fanta',em:'',role:'CASHIER',on:0,date:'15/09/2026',last:''}];
+const nm=u=>(u.pre+' '+u.nom).trim(),admins=()=>USR.filter(u=>u.role=='ADMIN'&&u.on);
+function rUsers(){const q=S.uq.toLowerCase(),l=USR.map((u,i)=>({u,i})).filter(({u})=>(nm(u)+' '+u.u).toLowerCase().includes(q)&&(!S.ur||u.role==S.ur)&&(!S.us||(S.us=='on')==!!u.on));
+$('#ut').innerHTML=l.length?l.map(({u,i})=>`<tr><td>${E(nm(u))}</td><td>${E(u.u)}</td><td>${RL[u.role]}</td><td>${u.on?'<span class="badge ok">✔ Actif</span>':'<span class="badge err">○ Inactif</span>'}</td><td>${u.date}</td><td>${u.last||'Jamais'}</td><td><div class="row"><button class="btn" data-e="${i}">Modifier</button><button class="btn" data-p="${i}">Mot de passe</button>${u.me?'':`<button class="btn" data-t="${i}">${u.on?'Désactiver':'Activer'}</button>`}</div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Aucun utilisateur trouvé.</td></tr>'}
+function vUsers(){shell('Utilisateurs',`<div class="row" style="margin-bottom:12px"><input id="uq" type="search" placeholder="Rechercher un utilisateur" aria-label="Rechercher un utilisateur" style="max-width:230px" value="${E(S.uq)}"><select id="ur" aria-label="Rôle" style="max-width:170px"><option value="">Tous les rôles</option>${Object.entries(RL).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><select id="us" aria-label="Statut" style="max-width:140px"><option value="">Tous</option><option value="on">Actifs</option><option value="off">Inactifs</option></select><a class="btn p" href="#/userform" id="uadd" style="margin-left:auto">Ajouter un utilisateur</a></div><div class="card wrap"><table><thead><tr><th>Nom</th><th>Identifiant</th><th>Rôle</th><th>Statut</th><th>Créé le</th><th>Dernière connexion</th><th>Actions</th></tr></thead><tbody id="ut"></tbody></table></div><p style="color:var(--tx2);font-size:12px">Page réservée à l'administrateur. Dans l'application finale, les droits sont vérifiés côté serveur (Django), pas seulement par l'affichage.</p>`,'users');
+$('#ur').value=S.ur;$('#us').value=S.us;rUsers();$('#uadd').onclick=()=>{S.ue=-1};
+$('#uq').oninput=e=>{S.uq=e.target.value;rUsers()};$('#ur').onchange=e=>{S.ur=e.target.value;rUsers()};$('#us').onchange=e=>{S.us=e.target.value;rUsers()};
+$('#ut').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.e!==undefined){S.ue=+b.dataset.e;location.hash='#/userform';return}
+if(b.dataset.p!==undefined){S.up=+b.dataset.p;location.hash='#/userpwd';return}
+const u=USR[b.dataset.t];
+if(u.on&&u.role=='ADMIN'&&admins().length<2){toast('Impossible : c\'est le dernier administrateur actif.');return}
+if(u.on&&!confirm(`Désactiver le compte « ${u.u} » ? Cet utilisateur ne pourra plus se connecter.`))return;
+u.on=u.on?0:1;toast(u.on?`Compte « ${u.u} » activé.`:`Compte « ${u.u} » désactivé.`);rUsers()}}
+function vUserForm(){const ed=S.ue>=0,x=ed?USR[S.ue]:{nom:'',pre:'',u:'',em:'',role:'CASHIER',on:1};
+shell(ed?'Modifier un utilisateur':'Ajouter un utilisateur',`<form class="card" id="uf" novalidate style="max-width:600px"><p style="color:var(--tx2);margin:0">Les champs marqués * sont obligatoires.</p>
+<label for="un">Nom *</label><input id="un"><div class="et" id="e1" role="alert"></div><label for="up">Prénom</label><input id="up">
+${ed?`<label for="uu">Nom d'utilisateur</label><input id="uu" disabled>`:`<label for="uu">Nom d'utilisateur *</label><input id="uu" autocomplete="off"><div class="et" id="e2" role="alert"></div>`}
+<label for="um">E-mail</label><input id="um" type="email"><label for="ul">Rôle *</label><select id="ul" ${x.me?'disabled':''}>${Object.entries(RL).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>${x.me?'<div style="color:var(--tx2);font-size:12px">Vous ne pouvez pas modifier votre propre rôle.</div>':''}
+${ed?`<label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="ua" style="width:auto" ${x.on?'checked':''} ${x.me?'disabled':''}> Compte actif</label><div class="et" id="e5" role="alert"></div>`:`<label for="p1">Mot de passe *</label><input id="p1" type="password" autocomplete="new-password"><div class="et" id="e3" role="alert"></div><label for="p2">Confirmation du mot de passe *</label><input id="p2" type="password" autocomplete="new-password"><div class="et" id="e4" role="alert"></div>`}
+<div class="row" style="margin-top:16px"><button class="btn p">Enregistrer</button><a class="btn" href="#/users">Annuler</a></div></form>`,'users');
+$('#un').value=x.nom;$('#up').value=x.pre;$('#uu').value=x.u;$('#um').value=x.em;$('#ul').value=x.role;
+$('#uf').onsubmit=e=>{e.preventDefault();const nom=$('#un').value.trim(),role=x.me?x.role:$('#ul').value;let ok=1;
+$('#e1').textContent=nom?'':(ok=0,'Le nom est obligatoire.');
+if(!ed){const u=$('#uu').value.trim(),a=$('#p1').value,b=$('#p2').value;
+$('#e2').textContent=!u?(ok=0,'Le nom d\'utilisateur est obligatoire.'):/\s/.test(u)?(ok=0,'Pas d\'espaces dans le nom d\'utilisateur.'):USR.some(y=>y.u.toLowerCase()==u.toLowerCase())?(ok=0,'Ce nom d\'utilisateur existe déjà.'):'';
+$('#e3').textContent=a.length<8?(ok=0,'Au moins 8 caractères.'):/^\d+$/.test(a)?(ok=0,'Le mot de passe ne peut pas être uniquement numérique.'):'';
+$('#e4').textContent=a!==b?(ok=0,'Les mots de passe ne correspondent pas.'):'';
+if(!ok)return;USR.push({nom,pre:$('#up').value.trim(),u,em:$('#um').value.trim(),role,on:1,date:'13/10/2026',last:''});}
+else{const on=x.me?1:($('#ua').checked?1:0);$('#e5').textContent='';
+if(x.role=='ADMIN'&&x.on&&(role!='ADMIN'||!on)&&!admins().some(a=>a!==x)){$('#e5').textContent='Action impossible : c\'est le dernier administrateur actif.';return}
+if(!ok)return;Object.assign(x,{nom,pre:$('#up').value.trim(),em:$('#um').value.trim(),role,on})}
+toast('Utilisateur enregistré.');location.hash='#/users'}}
+function vUserPwd(){const x=USR[S.up];if(!x){location.hash='#/users';return}
+shell('Réinitialiser le mot de passe',`<form class="card" id="pf2" novalidate style="max-width:520px"><p style="margin:0">Compte : <b>${E(x.u)}</b></p><label for="n1">Nouveau mot de passe *</label><input id="n1" type="password" autocomplete="new-password"><div class="et" id="e1" role="alert"></div><label for="n2">Confirmation *</label><input id="n2" type="password" autocomplete="new-password"><div class="et" id="e2" role="alert"></div><p style="color:var(--tx2);font-size:12px">Les mots de passe ne sont jamais affichés ni enregistrés en clair.</p><div class="row"><button class="btn p">Réinitialiser</button><a class="btn" href="#/users">Annuler</a></div></form>`,'users');
+$('#pf2').onsubmit=e=>{e.preventDefault();const a=$('#n1').value,b=$('#n2').value;let ok=1;
+$('#e1').textContent=a.length<8?(ok=0,'Au moins 8 caractères.'):/^\d+$/.test(a)?(ok=0,'Le mot de passe ne peut pas être uniquement numérique.'):'';
+$('#e2').textContent=a!==b?(ok=0,'Les mots de passe ne correspondent pas.'):'';
+if(!ok)return;toast(`Mot de passe de « ${x.u} » réinitialisé.`);location.hash='#/users'}}
+const V={users:vUsers,userform:vUserForm,userpwd:vUserPwd,tickets:vTickets,categories:vCats,catform:vCatForm,settings:vSettings,login:vLogin,dashboard:vDash,pos:vPos,pay:vPay,done:vDone,ticket:vTicket,orders:vOrders,menus:vMenus,menuform:vMenuForm,clients:vClients,payments:vPayments,reports:vReports};
+function go(){let h=location.hash.slice(2)||'login';if(!V[h]||(h!='login'&&!S.in))h='login';if(location.hash!='#/'+h){location.hash='#/'+h;return}V[h]();window.scrollTo(0,0)}
+addEventListener('hashchange',go);go();
+</script></body></html>

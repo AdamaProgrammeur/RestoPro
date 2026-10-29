@@ -1,0 +1,27 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="pos-screen" data-pos-screen data-payment-url-template="{% url 'frontend:collect_payment' 0 %}">
+  <div class="pos-toolbar"><span class="muted" data-pos-hint>Choisissez les plats à ajouter au panier.</span><a class="button button-secondary" href="{% url 'frontend:orders' %}">Voir les commandes</a></div>
+  <div class="pos-layout">
+    <section class="pos-catalog" aria-label="Carte du restaurant">
+      <label class="pos-search"><span>⌕</span><input type="search" placeholder="Rechercher un plat…" aria-label="Rechercher un plat" data-pos-search></label>
+      <div class="pos-chips" data-pos-categories aria-label="Filtrer par catégorie"></div>
+      <div class="pos-items" data-pos-items><div class="empty">Chargement de la carte…</div></div>
+    </section>
+    <aside class="pos-cart card" aria-label="Panier de la commande">
+      <div class="pos-cart-heading"><h2>Panier <span data-cart-count>(0)</span></h2><button class="button button-secondary button-small" type="button" data-clear-cart>Vider</button></div>
+      <div class="pos-cart-lines" data-cart-lines><div class="empty">Le panier est vide.<br>Choisissez un plat pour commencer.</div></div>
+      <form data-order-form>
+        <label>Client <select name="customer"><option value="">Client anonyme</option></select></label>
+        <label>Type de commande<select name="order_type"><option value="DINE_IN">Sur place</option><option value="TAKEAWAY">À emporter</option><option value="DELIVERY">Livraison</option></select></label>
+        <label>Remarques<textarea name="notes" rows="2"></textarea></label>
+        <div class="pos-total"><span>Total</span><strong data-cart-total>0 FCFA</strong></div>
+        <p class="pos-error" data-pos-error role="alert"></p>
+        <button class="button button-primary pos-submit" type="submit" disabled>Enregistrer la commande <span>→</span></button>
+      </form>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/pos.js' %}" defer></script>{% endblock %}

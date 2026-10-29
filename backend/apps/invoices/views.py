@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.accounts.permissions import IsRestaurantAdmin
+from apps.accounts.permissions import CanCollectPayments
 from apps.orders.models import Order
 
 from .models import Invoice, InvoiceItem
@@ -49,7 +49,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     @action(
         detail=False,
         methods=["post"],
-        permission_classes=[IsRestaurantAdmin],
+        permission_classes=[CanCollectPayments],
         url_path="issue",
     )
     def issue(self, request):
@@ -83,7 +83,6 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             try:
                 order = (
                     Order.objects.select_for_update()
-                    .select_related("customer")
                     .prefetch_related("items")
                     .get(pk=order_id)
                 )

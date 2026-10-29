@@ -1,0 +1,42 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="collection-page" data-collection-screen data-order-id="{{ order_id }}" data-ticket-url-template="{% url 'frontend:ticket' 0 %}" data-collect-url-template="{% url 'frontend:collect_payment' 0 %}" data-orders-url="{% url 'frontend:orders' %}" data-pos-url="{% url 'frontend:pos' %}" data-cashier="{{ request.user.get_full_name|default:request.user.username|escape }}">
+  <div class="collection-toolbar"><a class="button button-secondary" href="{% url 'frontend:pos' %}">← Retour à la caisse</a><span class="collection-progress"><span class="done">1</span><i></i><span class="active">2</span><i></i><span>3</span></span></div>
+  <div class="collection-grid" data-collect-view>
+    <section class="panel collection-panel">
+      <p class="eyebrow">ÉTAPE 2 · ENCAISSEMENT</p><h2>Mode de paiement</h2>
+      <div class="payment-methods" role="group" aria-label="Mode de paiement">
+        <button type="button" class="method-option active" data-method="CASH"><span>▣</span>Espèces</button>
+        <button type="button" class="method-option" data-method="ORANGE_MONEY"><span>◉</span>Orange Money</button>
+        <button type="button" class="method-option" data-method="MOOV_MONEY"><span>◉</span>Moov Money</button>
+        <button type="button" class="method-option" data-method="CARD"><span>▤</span>Carte bancaire</button>
+        <button type="button" class="method-option" data-method="OTHER"><span>＋</span>Autre</button>
+      </div>
+      <form data-collection-form>
+        <label class="received-label">Montant reçu (FCFA)<input name="amount_received" type="number" min="1" step="any" inputmode="decimal" required></label>
+        <button class="exact-amount" type="button" data-exact-amount>Montant exact <strong data-exact-label>—</strong></button>
+        <div class="collection-summary-line"><span>À appliquer sur la commande</span><strong data-applied>—</strong></div>
+        <div class="collection-summary-line change-line" data-change-row hidden><span>Monnaie à rendre</span><strong data-change>0 FCFA</strong></div>
+        <p class="collection-balance">Reste à payer : <strong data-balance>—</strong></p>
+        <p class="form-error" data-collection-error role="alert"></p>
+        <button class="button button-primary collection-submit" type="submit">Confirmer le paiement</button>
+      </form>
+    </section>
+    <aside class="panel order-summary-panel">
+      <p class="eyebrow">RÉCAPITULATIF</p><h2 data-order-number>Commande…</h2>
+      <p class="summary-client">Client : <strong data-customer>—</strong></p>
+      <div class="summary-items" data-order-items></div>
+      <div class="summary-totals"><div><span>Total</span><strong data-total>—</strong></div><div><span>Déjà payé</span><strong data-paid>—</strong></div><div class="remaining"><span>Reste à payer</span><strong data-remaining>—</strong></div></div>
+    </aside>
+  </div>
+  <section class="panel payment-success" data-payment-success hidden>
+    <span class="success-mark">✓</span><p class="eyebrow">ENCAISSEMENT TERMINÉ</p><h2 data-success-title>Paiement enregistré avec succès</h2>
+    <div class="success-details"><div><span>Commande</span><strong data-success-order>—</strong></div><div><span>Montant payé</span><strong data-success-paid>—</strong></div><div><span>Mode</span><strong data-success-method>—</strong></div><div><span>Statut</span><strong data-success-status>—</strong></div><div><span>Date</span><strong data-success-date>—</strong></div><div data-success-change-row hidden><span>Monnaie rendue</span><strong data-success-change>—</strong></div><div data-success-balance-row hidden><span>Reste à payer</span><strong data-success-balance>—</strong></div></div>
+    <p class="form-error" data-invoice-warning hidden></p>
+    <div class="success-actions"><button class="button button-primary" data-print-ticket type="button">Réimprimer le ticket</button><a class="button button-secondary" data-continue-payment href="#" hidden>Encaisser le reste</a><a class="button button-secondary" href="{% url 'frontend:pos' %}">Nouvelle commande</a><a class="button button-secondary" data-view-order href="{% url 'frontend:orders' %}">Consulter la commande</a></div>
+  </section>
+  <p class="form-error collection-load-error" data-load-error role="alert"></p>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/collection.js' %}?v=2" defer></script>{% endblock %}

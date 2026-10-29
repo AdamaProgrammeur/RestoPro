@@ -1,0 +1,11 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="dashboard-page">
+  <div class="dashboard-controls"><label for="dashboard-period">Période</label><select id="dashboard-period" data-dashboard-period><option value="today">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option></select><a class="button button-primary" href="{% url 'frontend:pos' %}">Nouvelle commande</a></div>
+  <section class="stat-grid"><article class="stat-card"><span class="stat-label">Chiffre d’affaires</span><strong data-metric="revenue">—</strong></article><article class="stat-card"><span class="stat-label">Commandes</span><strong data-metric="orders">—</strong></article><article class="stat-card"><span class="stat-label">Montant encaissé</span><strong class="metric-ok" data-metric="paid">—</strong></article><article class="stat-card"><span class="stat-label">En attente de paiement</span><strong class="metric-warn" data-metric="pending">—</strong></article></section>
+  <section class="content-grid"><article class="panel"><div class="panel-heading"><div><h2>Évolution des ventes</h2><p class="muted">Montant journalier des commandes, en FCFA</p></div></div><div data-sales><p class="table-message">Chargement des ventes…</p></div></article><article class="panel"><div class="panel-heading"><div><h2>Plats les plus vendus</h2><p class="muted">Classement sur la période</p></div></div><div data-top-dishes><p class="table-message">Chargement des plats…</p></div></article></section>
+  <section class="panel dashboard-orders"><div class="panel-heading"><div><h2>Commandes récentes</h2><p class="muted">Suivez les dernières commandes</p></div><a href="{% url 'frontend:orders' %}" class="text-link">Tout voir →</a></div><div class="recent-orders" data-recent-orders><p class="table-message">Chargement des commandes…</p></div></section>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/dashboard.js' %}" defer></script>{% endblock %}

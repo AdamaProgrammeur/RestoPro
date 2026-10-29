@@ -1,0 +1,11 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="menu-manager" data-menu-manager>
+  <div class="menu-toolbar"><button class="button button-primary" type="button" data-menu-add>Ajouter un plat</button></div>
+  <div class="menu-filters"><label class="search-box"><span>⌕</span><input type="search" placeholder="Rechercher un plat…" aria-label="Rechercher un plat" data-menu-search></label><select aria-label="Catégorie" data-menu-category><option value="">Toutes les catégories</option></select><select aria-label="Disponibilité" data-menu-availability><option value="">Toutes les disponibilités</option><option value="true">Disponibles</option><option value="false">Indisponibles</option></select><span class="resource-status" data-menu-status></span></div>
+  <div class="menu-cards" data-menu-cards><p class="table-message">Chargement de la carte…</p></div>
+  <dialog id="menu-editor" class="editor-modal"><form class="editor-form"></form></dialog>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/menu.js' %}" defer></script>{% endblock %}

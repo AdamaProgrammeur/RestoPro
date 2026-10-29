@@ -65,6 +65,12 @@ class RestaurantSettings(models.Model):
         verbose_name="Message en bas du ticket",
     )
 
+    receipt_width = models.PositiveSmallIntegerField(
+        choices=[(58, "58 mm"), (80, "80 mm")],
+        default=80,
+        verbose_name="Largeur du ticket",
+    )
+
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name="Dernière modification",

@@ -7,7 +7,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.accounts.permissions import IsRestaurantAdmin
+from apps.accounts.permissions import CanCollectPayments, IsRestaurantAdmin
 from apps.orders.models import Order
 
 from .models import Payment
@@ -45,7 +45,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=["post"],
-        permission_classes=[IsRestaurantAdmin],
+        permission_classes=[CanCollectPayments],
         url_path="confirm",
     )
     def confirm(self, request, pk=None):

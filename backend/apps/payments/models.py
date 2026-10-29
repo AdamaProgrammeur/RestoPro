@@ -10,7 +10,9 @@ class Payment(models.Model):
     class Method(models.TextChoices):
         CASH = "CASH", "Espèces"
         ORANGE_MONEY = "ORANGE_MONEY", "Orange Money"
+        MOOV_MONEY = "MOOV_MONEY", "Moov Money"
         WAVE = "WAVE", "Wave"
+        CARD = "CARD", "Carte bancaire"
         OTHER = "OTHER", "Autre"
 
     class Status(models.TextChoices):
@@ -38,6 +40,20 @@ class Payment(models.Model):
         validators=[MinValueValidator(Decimal("0.01"))],
         verbose_name="Montant",
     )
+
+    amount_received = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Montant reçu",
+    )
+
+    @property
+    def change_given(self):
+        if self.amount_received is None:
+            return Decimal("0.00")
+        return max(self.amount_received - self.amount, Decimal("0.00"))
 
     status = models.CharField(
         max_length=20,

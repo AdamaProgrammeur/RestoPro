@@ -9,20 +9,28 @@ from .models import Payment
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    created_by_name = serializers.CharField(
-        source="created_by.username",
-        read_only=True,
-    )
+    created_by_name = serializers.SerializerMethodField()
 
-    confirmed_by_name = serializers.CharField(
-        source="confirmed_by.username",
-        read_only=True,
-    )
+    confirmed_by_name = serializers.SerializerMethodField()
 
     order_number = serializers.CharField(
         source="order.order_number",
         read_only=True,
     )
+
+    change_given = serializers.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        read_only=True,
+    )
+
+    def get_created_by_name(self, obj):
+        return obj.created_by.get_full_name().strip() or obj.created_by.username
+
+    def get_confirmed_by_name(self, obj):
+        if not obj.confirmed_by:
+            return ""
+        return obj.confirmed_by.get_full_name().strip() or obj.confirmed_by.username
 
     class Meta:
         model = Payment
@@ -32,6 +40,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             "order_number",
             "method",
             "amount",
+            "amount_received",
+            "change_given",
             "status",
             "reference",
             "notes",
@@ -76,6 +86,20 @@ class PaymentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"order": "Cette commande est déjà clôturée."}
             )
+
+        amount = attrs.get("amount")
+        received = attrs.get("amount_received", amount)
+        method = attrs.get("method")
+        if amount is not None and received is not None:
+            if received < amount:
+                raise serializers.ValidationError({
+                    "amount_received": "Le montant reçu ne peut pas être inférieur au montant du paiement."
+                })
+            if method != Payment.Method.CASH and received != amount:
+                raise serializers.ValidationError({
+                    "amount_received": "La monnaie rendue est uniquement applicable aux paiements en espèces."
+                })
+            attrs["amount_received"] = received
 
         if order and amount is not None:
             confirmed_total = sum(

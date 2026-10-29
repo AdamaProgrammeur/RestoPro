@@ -1,0 +1,15 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block content %}
+<section class="resource-page tickets-page" data-resource="invoices">
+  <div class="ticket-note"><span class="ticket-note-icon">↻</span><div><strong>Réimprimer un ticket</strong><p>Réimprimer ne modifie ni la commande ni les montants.</p></div><span class="resource-status" data-status>Chargement…</span></div>
+  <article class="panel list-panel">
+    <div class="list-toolbar">
+      <label class="search-box"><span>⌕</span><input type="search" placeholder="Rechercher un ticket ou un client…" aria-label="Rechercher un ticket ou un client" data-search></label>
+      <div class="toolbar-actions"><button class="button button-secondary" type="button" data-refresh>Actualiser</button></div>
+    </div>
+    <div class="table-scroll"><table class="data-table orders-table tickets-table"><thead><tr><th>Ticket</th><th>Heure</th><th>Client</th><th>Montant</th><th>Paiement</th><th>Action</th></tr></thead><tbody><tr><td colspan="6" class="table-message">Chargement des tickets…</td></tr></tbody></table></div>
+  </article>
+</section>
+{% endblock %}
+{% block page_js %}<script src="{% static 'frontend/js/invoices.js' %}" defer></script>{% endblock %}

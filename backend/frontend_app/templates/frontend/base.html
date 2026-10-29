@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17324D">
+  <title>{% block title %}{{ title|default:'RestoPro' }}{% endblock %} · RestoPro</title>
+  <script>try{const t=localStorage.getItem('restopro-theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(_){document.documentElement.dataset.theme='light'}</script>
+  <link rel="stylesheet" href="{% static 'frontend/css/main.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'frontend/css/layout.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'frontend/css/components.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'frontend/css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'frontend/css/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'frontend/css/responsive.css' %}?v=2">
+  {% block extra_css %}{% endblock %}
+</head>
+<body data-user-role="{{ request.user.role }}" data-superuser="{{ request.user.is_superuser|yesno:'true,false' }}">
+  <form hidden>{% csrf_token %}</form>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="{% if request.user.role == 'MANAGER' %}{% url 'frontend:orders' %}{% else %}{% url 'frontend:dashboard' %}{% endif %}"><span>Resto<b>Pro</b></span></a>
+      <nav class="nav-menu" aria-label="Navigation principale">
+        {% if request.user.role != 'MANAGER' %}<a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="{% url 'frontend:dashboard' %}"><span>⌂</span>Tableau de bord</a>{% endif %}
+        <a class="nav-link {% if page == 'pos' %}active{% endif %}" href="{% url 'frontend:pos' %}"><span>＋</span>Nouvelle commande</a>
+        <a class="nav-link {% if page == 'orders' %}active{% endif %}" href="{% url 'frontend:orders' %}"><span>▤</span>Commandes</a>
+        <a class="nav-link {% if page == 'menu' %}active{% endif %}" href="{% url 'frontend:menu' %}"><span>☷</span>Menus</a>
+        <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="{% url 'frontend:categories' %}"><span>▦</span>Catégories</a>
+        <a class="nav-link {% if page == 'customers' %}active{% endif %}" href="{% url 'frontend:customers' %}"><span>♙</span>Clients</a>
+        <a class="nav-link {% if page == 'payments' %}active{% endif %}" href="{% url 'frontend:payments' %}"><span>◎</span>Paiements</a>
+        <a class="nav-link {% if page == 'invoices' %}active{% endif %}" href="{% url 'frontend:invoices' %}"><span>▧</span>Tickets et factures</a>
+        {% if request.user.role != 'MANAGER' %}<a class="nav-link {% if page == 'reports' %}active{% endif %}" href="{% url 'frontend:reports' %}"><span>▥</span>Rapports</a>{% endif %}
+        <a class="nav-link {% if page == 'expenses' %}active{% endif %}" href="{% url 'frontend:expenses' %}"><span>↘</span>Dépenses</a>
+        {% if request.user.role != 'MANAGER' %}
+        <span class="nav-caption">ADMINISTRATION</span>
+        <a class="nav-link {% if page == 'users' %}active{% endif %}" href="{% url 'frontend:users' %}"><span>♧</span>Utilisateurs</a>
+        <a class="nav-link {% if page == 'settings' %}active{% endif %}" href="{% url 'frontend:settings' %}"><span>⚙</span>Paramètres</a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-footer"><div class="avatar">{{ request.user.username|first|upper }}</div><div class="user-details"><strong>{{ request.user.get_full_name|default:request.user.username }}</strong><small>{{ request.user.get_role_display|default:'Équipe' }}</small></div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu">☰</button><h1 class="topbar-title">{{ title }}</h1><span class="today" id="today"></span><div class="theme-switch" role="group" aria-label="Thème de l’interface"><button type="button" data-theme-choice="light" aria-label="Thème clair" title="Thème clair"><span aria-hidden="true">☀</span><span class="theme-label"> Clair</span></button><button type="button" data-theme-choice="dark" aria-label="Thème sombre" title="Thème sombre"><span aria-hidden="true">☾</span><span class="theme-label"> Sombre</span></button></div><div class="header-user"><strong>{{ request.user.get_full_name|default:request.user.username }}</strong><small>{{ request.user.get_role_display|default:'Équipe' }}</small></div><a class="button button-secondary header-logout" href="{% url 'frontend:logout' %}">Déconnexion</a></header>
+      <div class="page-content">{% block content %}{% endblock %}</div>
+      <footer class="app-footer">Logiciel RestoPro développé par Adama Programmeur · Contact : <a href="tel:+22378746643">+223 78 74 66 43</a></footer>
+    </main>
+  </div>
+  <script src="{% static 'frontend/js/api.js' %}" defer></script>
+  <script src="{% static 'frontend/js/crud.js' %}" defer></script>
+  <script src="{% static 'frontend/js/theme.js' %}?v=2" defer></script>
+  <script src="{% static 'frontend/js/main.js' %}?v=2" defer></script>
+  {% block page_js %}{% endblock %}
+</body>
+</html>

@@ -7,6 +7,7 @@ class Customer(models.Model):
         max_length=100,
         blank=True,
         verbose_name="Prénom"
+        
     )
 
     last_name = models.CharField(

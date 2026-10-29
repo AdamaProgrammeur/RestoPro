@@ -475,3 +475,25 @@ Projet : RESTOPRO
 Développeur : Adama Programmeur
 Description : API de gestion de restaurant --- menu, commandes,
 paiements, factures, dépenses et tableau de bord.
+
+## Installation locale sur le poste du restaurant
+
+Pour la procédure complète destinée au client, voir [PROCEDURE_INSTALLATION_CLIENT.md](PROCEDURE_INSTALLATION_CLIENT.md).
+
+Le projet fournit un mode local mono-poste avec une base SQLite indépendante de PostgreSQL. Le serveur Django écoute uniquement sur `127.0.0.1` : le raccourci du Bureau ouvre l’application dans le navigateur par défaut.
+
+### Windows
+
+1. Copier le dossier du projet sur le PC du restaurant.
+2. Installer Python 3.12 depuis [python.org](https://www.python.org/downloads/) en activant l’ajout de Python au PATH.
+3. Ouvrir `backend` et double-cliquer `install_windows.bat`. Le script installe les dépendances, initialise la base locale, demande de créer le compte administrateur et place le raccourci RestoPro sur le Bureau.
+4. Double-cliquer ensuite sur l’icône **RestoPro** pour ouvrir le logiciel.
+
+### Linux
+
+1. Copier le dossier du projet sur le PC du restaurant.
+2. Depuis un terminal, lancer `backend/install_linux.sh`.
+3. Créer le compte administrateur lorsque le script le demande. Le raccourci **RestoPro** est ajouté au Bureau et au menu des applications.
+4. Double-cliquer l’icône pour ouvrir le logiciel dans le navigateur par défaut.
+
+La base locale se trouve dans `backend/restopro_local.sqlite3`. Il faut conserver une sauvegarde régulière de ce fichier et du dossier `backend/media` (logos et images). Le mode PostgreSQL reste utilisé normalement tant que `RESTOPRO_LOCAL=1` n’est pas défini.

@@ -20,6 +20,7 @@ class RestaurantSettingsSerializer(serializers.ModelSerializer):
             "currency",
             "tax_rate",
             "receipt_footer",
+            "receipt_width",
             "updated_at",
         ]
         read_only_fields = [
